@@ -31,7 +31,7 @@ type StampSortedDisplayOrder =
 
 type StampDisplayOrder =
     | Unsorted // this will be interpreted as in the order in the model
-    | Sorted of StampDisplayOrder
+    | Sorted of StampSortedDisplayOrder
 
 (* "The" view model is the list of stamp view models together with current display order. An invariant here is that
 the order of view models in the list corresponds to current display order value. *)
@@ -50,6 +50,7 @@ module ViewModel =
         /// Sorts the stamps depending on stamp display order.
         let sortStamps (displayOrder : StampSortedDisplayOrder) =
             
+            // the sorting relation
             let rel { StampViewModel.Value = v } =
                 match displayOrder with
                 | ByValueAscending -> int v
