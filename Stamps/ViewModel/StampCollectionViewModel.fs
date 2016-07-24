@@ -25,10 +25,13 @@ type StampViewModel =
 (* Here is an example of a display concern which should not be present in the model but only in the view model. Stamps
 can be displayed in certain order and the following type defines the possibilities. *)
 
-type StampDisplayOrder =
-    | Unsorted
+type StampSortedDisplayOrder =
     | ByValueAscending
     | ByValueDescending
+
+type StampDisplayOrder =
+    | Unsorted // this will be interpreted as in the order in the model
+    | Sorted of StampDisplayOrder
 
 (* "The" view model is the list of stamp view models together with current display order. An invariant here is that
 the order of view models in the list corresponds to current display order value. *)
@@ -45,7 +48,7 @@ module ViewModel =
     module private Aux =
         
         /// Sorts the stamps depending on stamp display order.
-        let sortStamps (displayOrder : StampDisplayOrder) =
+        let sortStamps (displayOrder : StampSortedDisplayOrder) =
             
             let rel { StampViewModel.Value = v } =
                 match displayOrder with
