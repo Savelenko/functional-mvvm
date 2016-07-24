@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="StampCollectionViewModel.fs" />
+    <Compile Include="Messaging.fs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Model\Model.fsproj">

@@ -45,6 +45,7 @@
   <ItemGroup>
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="Prelude.fs" />
+    <Compile Include="Effects.fs" />
     <Compile Include="StampCollection.fs" />
   </ItemGroup>
   <PropertyGroup>

@@ -28,12 +28,7 @@ type Stamp =
 type OwnedStamp = OwnedStamp of stamp : Stamp * numberOwned : uint32
 
 (* Verification of stamp rareness can be performed by the imaginary "world stamp knowledgebase service". By applying
-the dependency inversion principle, the model defines how it wishes to consume the service. We use F# Async as a base
-for the type of effectful computations. Below, value None designates no need to perform any effect. *)
-
-type Effect<'T> =
-    | None
-    | Effect of Async<'T>
+the dependency inversion principle, the model defines how it wishes to consume the service. *)
 
 type IStampRarenessService =
     
