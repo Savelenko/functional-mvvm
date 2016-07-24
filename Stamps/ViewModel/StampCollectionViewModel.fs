@@ -26,6 +26,7 @@ type StampViewModel =
 can be displayed in certain order and the following type defines the possibilities. *)
 
 type StampDisplayOrder =
+    | Unsorted
     | ByValueAscending
     | ByValueDescending
 
