@@ -46,6 +46,13 @@
     <Compile Include="AssemblyInfo.fs" />
     <Compile Include="StampCollectionViewModel.fs" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Model\Model.fsproj">
+      <Name>Model</Name>
+      <Project>{148aee05-bb52-4a8b-a1cf-fbf707be52ec}</Project>
+      <Private>True</Private>
+    </ProjectReference>
+  </ItemGroup>
   <PropertyGroup>
     <MinimumVisualStudioVersion Condition="'$(MinimumVisualStudioVersion)' == ''">11</MinimumVisualStudioVersion>
   </PropertyGroup>
