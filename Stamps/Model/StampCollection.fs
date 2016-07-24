@@ -47,8 +47,7 @@ type StampCollection =
     RarenessService : IStampRarenessService
     }
 
-[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
-module StampCollection =
+module Model =
 
     /// The initial model which the application starts with.
     let emptyCollection rarenessService =
