@@ -28,11 +28,13 @@ module Dispatching =
     
     let dispatch (m,vm) = function
 
+        // User initiated action "add stamp to collection" in the view.
         | AddStamp (description, value) ->
             let m' = Model.addStampToCollection description value m
             let vm' = ViewModel.refresh m' vm
             (m',vm',None)
         
+        // User initiated action "validate stamp rareness" in the view.
         | ValidateRareness description -> 
             let validation = Model.verifyStampRareness description m
             // Transform the outcome of validation to a message which will be fed into this same dispatcher function.
@@ -44,11 +46,13 @@ module Dispatching =
             (m,vm,validation')
             // TODO extend VM with feedback about rareness validation being in-progress
         
+        // The "effectful world" computed rareness of a stamp.
         | RarenessValidated (description, rareness) ->
             let m' = Model.setStampRareness description rareness m
             let vm' = ViewModel.refresh m' vm
             (m',vm',None)
 
+        // ... and so on
         | SortStamps order ->
             // Note, that the model does not change, as this message is processed solely by the view model.
             let vm' = ViewModel.changeDisplayOrder m (Sorted order) vm
