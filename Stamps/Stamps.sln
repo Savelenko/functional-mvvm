@@ -9,6 +9,8 @@ Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "ViewModel", "ViewModel\View
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "StampsDemo", "View\StampsDemo.csproj", "{1BED92F8-A648-418D-940C-9CD74AFB7F65}"
 EndProject
+Project("{F2A71F9B-5D33-465A-A702-920D77279786}") = "DataAccess", "DataAccess\DataAccess.fsproj", "{420164B6-3844-45D4-8042-36EFFB3C7BD7}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{1BED92F8-A648-418D-940C-9CD74AFB7F65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1BED92F8-A648-418D-940C-9CD74AFB7F65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1BED92F8-A648-418D-940C-9CD74AFB7F65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{420164B6-3844-45D4-8042-36EFFB3C7BD7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{420164B6-3844-45D4-8042-36EFFB3C7BD7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{420164B6-3844-45D4-8042-36EFFB3C7BD7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{420164B6-3844-45D4-8042-36EFFB3C7BD7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

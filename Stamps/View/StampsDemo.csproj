@@ -100,6 +100,10 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\DataAccess\DataAccess.fsproj">
+      <Project>{420164b6-3844-45d4-8042-36effb3c7bd7}</Project>
+      <Name>DataAccess</Name>
+    </ProjectReference>
     <ProjectReference Include="..\Model\Model.fsproj">
       <Project>{148aee05-bb52-4a8b-a1cf-fbf707be52ec}</Project>
       <Name>Model</Name>
