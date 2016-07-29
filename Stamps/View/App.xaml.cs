@@ -11,7 +11,7 @@ namespace Stamps.View
         private void Application_Startup(object sender, StartupEventArgs e)
         {            
             var stampService = new WorldStampKnowledgeBaseService();
-            var initialModel = Stamps.Model.Model.emptyCollection(stampService);
+            var initialModel = Stamps.Model.Model.smallCollection(stampService);
             var initialViewModel = Stamps.ViewModel.ViewModel.initialViewModel(initialModel);
 
             var application = new ApplicationModel(initialModel, initialViewModel);

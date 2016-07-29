@@ -1,5 +1,7 @@
 ﻿namespace Stamps.ViewModel
 
+open System
+
 (* The view model of a stamp. It differs from the model of a stamp exactly because this is a model of the _view_. The
 first type is about rareness. Observe, that its terminology is a bit different: the view model does not care about the
 fact that rareness must be verified. We need similar values of rareness here for display purposes in the view. *)
@@ -7,7 +9,13 @@ fact that rareness must be verified. We need similar values of rareness here for
 type Rareness =
     | NotDisplayed
     | Rare
-    | NotRare    
+    | NotRare
+
+    override r.ToString () =
+        match r with
+        | NotDisplayed -> String.Empty
+        | Rare -> "Rare"
+        | NotRare -> "Common"
 
 (* The stamp view model proper contains basic stamp "properties" which should be displayed by the view. It is the
 intention, that the view provides possibility to determine rareness. This view model contains enabled/disabled state

@@ -6,21 +6,52 @@
         xmlns:local="clr-namespace:Stamps.View"
         mc:Ignorable="d"
         Title="Stamps demo" Height="350" Width="525">
+    
+    <Window.Resources>
+        <local:VisibilityConverter x:Key="visibilityConverter" />
+    </Window.Resources>
+    
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition Height="30"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <ListBox Grid.Row="0" ItemsSource="{Binding Path=Stamps, Mode=OneTime}"/>
+        <ListBox Grid.Row="0" ItemsSource="{Binding Path=Stamps, Mode=OneTime}" HorizontalContentAlignment="Stretch">
+            <ListBox.ItemTemplate>
+                <DataTemplate>
+                    <Border BorderBrush="DarkBlue" BorderThickness="1" Margin="5" Padding="5">
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding Path=Description}" Width="200" Margin="0,0,4,0"/>
+                            <TextBlock Text="Value:" Width="40" Margin="0,0,4,0"/>
+                            <TextBlock Text="{Binding Path=Value}" Margin="0,0,4,0"/>
+                            <TextBlock Text="Rareness:" Margin="0,0,4,0"/>
+                            <TextBlock Text="{Binding Path=Rareness}"/>
+                            <Button VerticalAlignment="Center"                                    
+                                    Visibility="{Binding Path=IsVerificationEnabled, Converter={StaticResource visibilityConverter}}">
+                                check
+                            </Button>
+                        </StackPanel>
+                    </Border>
+                </DataTemplate>
+            </ListBox.ItemTemplate>
+        </ListBox>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <Label>Description</Label>
-            <TextBox Name="newStampDescription" Width="200" Margin="0,0,4,0" Height="20"/>
-            <Label>Value</Label>
-            <TextBox Name="newStampValue" Width="40" Margin="0,0,4,0" Height="20"></TextBox>
-            <Button Click="Button_Click">Add</Button>
+            <Label VerticalAlignment="Center">Settings</Label>
         </StackPanel>
+        <StackPanel Grid.Row="2" Orientation="Horizontal">
+            <Label VerticalAlignment="Center">Description</Label>
+            <TextBox Name="newStampDescription" Width="200" Margin="0,0,4,0" Height="20"/>
+            <Label VerticalAlignment="Center">Value</Label>
+            <TextBox Name="newStampValue" Width="40" Margin="0,0,4,0" Height="20"></TextBox>
+            <Button Click="Button_Click" VerticalAlignment="Center">Add stamp</Button>
+        </StackPanel>
+        <TextBlock Grid.Row="3" Background="Yellow" Margin="0" TextAlignment="Center">
+            Working...
+        </TextBlock>
     </Grid>
 </Window>

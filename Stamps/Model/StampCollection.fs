@@ -44,12 +44,31 @@ type StampCollection =
 
 module Model =
 
-    /// The initial model which the application starts with.
+    /// The initial model which the application may start with.
     let emptyCollection rarenessService =
         {
         Stamps = Set.empty
         RarenessService = rarenessService
         }
+
+    /// A small pre-filled model which the application starts with.
+    let smallCollection rarenessService =
+
+        let stamp1 = { Description = "Aereo Nicaragua 1987"; Value = 30u; Rareness = Unknown }
+        let stamp2 = { Description = "Comunicaciones cosmicas"; Value = 6u; Rareness = VerifiedRare }
+        let stamp3 = { Description = "Shinkansen N700"; Value = 100u; Rareness = Unknown }
+
+        let stamps =
+            Set.empty
+            |> Set.add (OwnedStamp (stamp1, 1u))
+            |> Set.add (OwnedStamp (stamp2, 1u))
+            |> Set.add (OwnedStamp (stamp3, 2u))
+        
+        {
+        Stamps = stamps
+        RarenessService = rarenessService
+        }
+
 
     (* In the next function we don't use type OwnedStamp for the convenience of the model consumer, i.e. the view
     model. We kind of consider type OwnedStamp to be implementation details of the model. *)
