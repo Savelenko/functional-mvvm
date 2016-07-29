@@ -12,6 +12,8 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Stamps.ViewModel;
+using Stamps.Messaging;
 
 namespace Stamps.View
 {
@@ -20,9 +22,38 @@ namespace Stamps.View
     /// </summary>
     public partial class MainWindow : Window
     {
-        public MainWindow()
+        private readonly ApplicationModel applicationModel;
+
+        public MainWindow(StampCollectionViewModel initialViewModel, ApplicationModel applicationModel)
         {
             InitializeComponent();
+
+            this.applicationModel = applicationModel;
+
+            this.DataContext = initialViewModel;
+
+            this.applicationModel.ViewModel.Subscribe(this.Render);
+        }
+
+        private void Render(StampCollectionViewModel viewModel)
+        {
+            this.DataContext = viewModel;
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            var description = this.newStampDescription.Text;
+
+            uint value;
+            if (UInt32.TryParse(this.newStampValue.Text, out value))
+            {
+                this.applicationModel.SendMessage(Message.NewAddStamp(description, value));
+            }
+            else
+            {
+                this.newStampValue.Text = "!!";
+            }
+                
         }
     }
 }

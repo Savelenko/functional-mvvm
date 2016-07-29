@@ -1,17 +1,22 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Data;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using Stamps.DataAccess;
 using System.Windows;
 
-namespace View
+namespace Stamps.View
 {
     /// <summary>
     /// Interaction logic for App.xaml
     /// </summary>
     public partial class App : Application
     {
+        private void Application_Startup(object sender, StartupEventArgs e)
+        {            
+            var stampService = new WorldStampKnowledgeBaseService();
+            var initialModel = Stamps.Model.Model.emptyCollection(stampService);
+            var initialViewModel = Stamps.ViewModel.ViewModel.initialViewModel(initialModel);
+
+            var application = new ApplicationModel(initialModel, initialViewModel);
+            var mainWindow = new MainWindow(initialViewModel, application);
+            mainWindow.Show();
+        }
     }
 }

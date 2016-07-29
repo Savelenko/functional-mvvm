@@ -6,7 +6,14 @@
         xmlns:local="clr-namespace:Stamps.View"
         mc:Ignorable="d"
         Title="Stamps demo" Height="350" Width="525">
-    <Grid>
-        
-    </Grid>
+    <StackPanel>
+        <ListBox ItemsSource="{Binding Path=Stamps, Mode=OneTime}"/>
+        <StackPanel Orientation="Horizontal">
+            <Label>Description</Label>
+            <TextBox Name="newStampDescription" Width="200" Margin="0,0,4,0"/>
+            <Label>Value</Label>
+            <TextBox Name="newStampValue" Width="40" Margin="0,0,4,0"></TextBox>
+            <Button Click="Button_Click">Add</Button>
+        </StackPanel>
+    </StackPanel>
 </Window>

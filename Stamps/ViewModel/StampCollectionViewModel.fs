@@ -22,6 +22,8 @@ type StampViewModel =
 
     member svm.IsVerificationEnabled = (svm.Rareness = NotDisplayed)
 
+    override svm.ToString () = sprintf "%s (%d)" svm.Description svm.Value        
+
 (* Here is an example of a display concern which should not be present in the model but only in the view model. Stamps
 can be displayed in certain order and the following type defines the possibilities. *)
 
@@ -95,7 +97,7 @@ module ViewModel =
     (* Public functions of the view model *)
 
     /// Computes the initial view model the application starts with, based on the initial model.
-    let initialViewModel = flip recalculateVM Unsorted
+    let initialViewModel model = flip recalculateVM Unsorted model
 
     /// Refreshes the view model when the model changes either due to addition of a new stamp or change in stamp
     /// rareness.
