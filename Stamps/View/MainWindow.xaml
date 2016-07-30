@@ -6,11 +6,11 @@
         xmlns:local="clr-namespace:Stamps.View"
         mc:Ignorable="d"
         Title="Stamps demo" Height="350" Width="525">
-    
+
     <Window.Resources>
         <local:VisibilityConverter x:Key="visibilityConverter" />
     </Window.Resources>
-    
+
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition />
@@ -41,7 +41,19 @@
             </ListBox.ItemTemplate>
         </ListBox>
         <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <Label VerticalAlignment="Center">Settings</Label>
+            <Label VerticalAlignment="Center">Sorting</Label>
+            <RadioButton Name="rbSortLowToHigh" VerticalAlignment="Center" Margin="0,0,10,0"
+                         Click="RadioButton_Click" IsThreeState="True">
+                Value low to high
+            </RadioButton>
+            <RadioButton Name="rbSortHighToLow" VerticalAlignment="Center" Margin="0,0,10,0"
+                         Click="RadioButton_Click" IsThreeState="True">
+                Value high to low
+            </RadioButton>
+            <RadioButton Name="rbSortNone" VerticalAlignment="Center" Margin="0,0,10,0"
+                         Click="RadioButton_Click" IsThreeState="True">
+                None
+            </RadioButton>
         </StackPanel>
         <StackPanel Grid.Row="2" Orientation="Horizontal">
             <Label VerticalAlignment="Center">Description</Label>

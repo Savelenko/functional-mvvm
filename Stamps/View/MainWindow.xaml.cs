@@ -24,13 +24,21 @@ namespace Stamps.View
     {
         private readonly ApplicationModel applicationModel;
 
+        private static readonly StampDisplayOrder SortedValueHighToLow =
+            StampDisplayOrder.NewSorted(StampSortedDisplayOrder.ByValueDescending);
+
+        private static readonly StampDisplayOrder SortedValueLowToHigh =
+            StampDisplayOrder.NewSorted(StampSortedDisplayOrder.ByValueAscending);
+
+        private static readonly StampDisplayOrder NotSorted = StampDisplayOrder.Unsorted;
+
         public MainWindow(StampCollectionViewModel initialViewModel, ApplicationModel applicationModel)
         {
             InitializeComponent();
 
             this.applicationModel = applicationModel;
 
-            this.DataContext = initialViewModel;
+            this.Render(initialViewModel);
 
             this.applicationModel.ViewModel.Subscribe(this.Render);
         }
@@ -38,6 +46,22 @@ namespace Stamps.View
         private void Render(StampCollectionViewModel viewModel)
         {
             this.DataContext = viewModel;
+
+            /* Some things are easier to make not using WPF data binding. The following fragment displays current
+             * stamp sorting order using the corresponding radio buttons. */
+             // { none of the radio buttons is checked }, by intention
+            if (viewModel.DisplayOrder.Equals(SortedValueHighToLow))
+            {
+                this.rbSortHighToLow.IsChecked = true;
+            }
+            else if (viewModel.DisplayOrder.Equals(SortedValueLowToHigh))
+            {
+                this.rbSortLowToHigh.IsChecked = true;
+            }
+            else if (viewModel.DisplayOrder.Equals(NotSorted))
+            {
+                this.rbSortNone.IsChecked = true;
+            }
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
@@ -54,6 +78,22 @@ namespace Stamps.View
                 this.newStampValue.Text = "!!";
             }
                 
+        }
+
+        private void RadioButton_Click(object sender, RoutedEventArgs e)
+        {
+            var rb = (RadioButton)sender;
+
+            var checkedNow = rb.IsChecked.GetValueOrDefault(false);
+            rb.IsChecked = !checkedNow;
+
+            var message =
+                rb == this.rbSortHighToLow ? Message.NewSortStamps(StampSortedDisplayOrder.ByValueDescending) :
+                rb == this.rbSortLowToHigh ? Message.NewSortStamps(StampSortedDisplayOrder.ByValueAscending) :
+                rb == this.rbSortNone ? Message.RemoveStampSorting :
+                this.Throw<Message>(new ArgumentException("Event handler attached to wrong element."));
+
+            this.applicationModel.SendMessage(message);
         }
     }
 }
