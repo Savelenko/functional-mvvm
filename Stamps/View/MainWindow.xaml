@@ -45,15 +45,15 @@
         <StackPanel Grid.Row="1" Orientation="Horizontal">
             <Label VerticalAlignment="Center">Sorting</Label>
             <RadioButton Name="rbSortLowToHigh" VerticalAlignment="Center" Margin="0,0,10,0"
-                         Click="RadioButton_Click" IsThreeState="True">
+                         Click="StampSortingRadioButtonClick" IsThreeState="True">
                 Value low to high
             </RadioButton>
             <RadioButton Name="rbSortHighToLow" VerticalAlignment="Center" Margin="0,0,10,0"
-                         Click="RadioButton_Click" IsThreeState="True">
+                         Click="StampSortingRadioButtonClick" IsThreeState="True">
                 Value high to low
             </RadioButton>
             <RadioButton Name="rbSortNone" VerticalAlignment="Center" Margin="0,0,10,0"
-                         Click="RadioButton_Click" IsThreeState="True">
+                         Click="StampSortingRadioButtonClick" IsThreeState="True">
                 None
             </RadioButton>
         </StackPanel>
@@ -62,7 +62,7 @@
             <TextBox Name="newStampDescription" Width="200" Margin="0,0,4,0" Height="20"/>
             <Label VerticalAlignment="Center">Value</Label>
             <TextBox Name="newStampValue" Width="40" Margin="0,0,4,0" Height="20"></TextBox>
-            <Button Click="Button_Click" VerticalAlignment="Center">Add stamp</Button>
+            <Button Click="AddNewStampButtonClick" VerticalAlignment="Center">Add stamp</Button>
         </StackPanel>
         <TextBlock Grid.Row="3" Background="Yellow" Margin="0" TextAlignment="Center"
                    Visibility="{Binding Path=IsRarenessVerificationInProgress,
