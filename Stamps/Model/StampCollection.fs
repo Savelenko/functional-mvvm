@@ -32,7 +32,7 @@ the dependency inversion principle, the model defines how it wishes to consume t
 
 type IStampRarenessService =
     
-    abstract VerifyRareness : Description -> Effect<Description * Rareness>
+    abstract VerifyRareness : Description * uint32 -> Effect<Description * Rareness>
 
 (* "The" main model is the collection of owned stamps together with the rareness service. *)
 
@@ -88,7 +88,7 @@ module Model =
     let addStampToCollection description value collection =
         
         (* Given the definition that descriptions are unique, this function, together with function emptyCollection,
-        maintain the invariant that there is at least one OwnedStamp in the collection for a given description. *)
+        maintains the invariant that there is at most one OwnedStamp in the collection for a given description. *)
 
         let desc (OwnedStamp ({ Description = d }, _)) = d
 
@@ -111,8 +111,8 @@ module Model =
     the first function occurs in the type of the second function. *)
     
     /// Computes rareness of the stamp with the given description.
-    let verifyStampRareness description collection =
-        collection.RarenessService.VerifyRareness description
+    let verifyStampRareness description value collection =
+        collection.RarenessService.VerifyRareness (description,value)
 
     /// Registers rareness of the stamp with the given description. The collection does not change if it contains no
     /// stamp with this description.

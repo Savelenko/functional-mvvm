@@ -50,6 +50,7 @@ type StampCollectionViewModel =
     {
     Stamps : List<StampViewModel>
     DisplayOrder : StampDisplayOrder
+    IsRarenessVerificationInProgress : bool
     }
 
 module ViewModel =
@@ -84,40 +85,51 @@ module ViewModel =
             Value = stamp.Value
             Rareness = r
             }
-    
-    /// Returns the view model of the complete stamp collection. This function is meant for reuse by public VM
-    /// functions.
-    let private recalculateVM model displayOrder =
-        
-        let unsortedViewModel =
-            {
-            Stamps = model |> Model.allStamps |> List.map Aux.viewModelOf
-            DisplayOrder = Unsorted
-            }
 
-        match displayOrder with
-        | Unsorted -> unsortedViewModel
-        | Sorted order ->
-            { unsortedViewModel with
-                    Stamps = Aux.sortStamps order unsortedViewModel.Stamps
-                    DisplayOrder = Sorted order }
+        /// Constructs a list of stamp view models from the complete model. 
+        let takeStampsFromModel = Model.allStamps >> List.map viewModelOf
 
     (* Public functions of the view model *)
 
     /// Computes the initial view model the application starts with, based on the initial model.
-    let initialViewModel model = flip recalculateVM Unsorted model
+    let initialViewModel model =
+        
+        {
+        Stamps = Aux.takeStampsFromModel model
+        DisplayOrder = Unsorted
+        IsRarenessVerificationInProgress = false
+        }
 
     /// Refreshes the view model when the model changes either due to addition of a new stamp or change in stamp
     /// rareness.
-    let refresh model (viewModel : StampCollectionViewModel) = recalculateVM model viewModel.DisplayOrder
+    let refresh model (viewModel : StampCollectionViewModel) =
+
+        let newStamps = Aux.takeStampsFromModel model
+            
+        (* As we are _refreshing_, retain current display order. *)
+        let newStampsWithPreservedOrder =
+            match viewModel.DisplayOrder with
+            | Unsorted -> newStamps
+            | Sorted order -> Aux.sortStamps order newStamps
+
+        
+        { viewModel with Stamps = newStampsWithPreservedOrder }
 
     /// Changes the display order of the stamps.
-    let changeDisplayOrder model displayOrder (viewModel : StampCollectionViewModel) =
-        
-        match displayOrder with
-        | Unsorted -> recalculateVM model Unsorted
-        | Sorted order as so when so <> viewModel.DisplayOrder ->
-            { viewModel with
-                    Stamps = Aux.sortStamps order viewModel.Stamps
-                    DisplayOrder = Sorted order }
-        | _ -> viewModel
+    let changeDisplayOrder model newDisplayOrder (viewModel : StampCollectionViewModel) =
+
+        let newStamps =
+            match viewModel.Stamps, newDisplayOrder with
+            | currentStamps, _ when viewModel.DisplayOrder = newDisplayOrder -> currentStamps
+            | currentStamps, Sorted order -> Aux.sortStamps order currentStamps
+            | currentStamps, Unsorted -> Aux.takeStampsFromModel model
+
+        { viewModel with Stamps = newStamps; DisplayOrder = newDisplayOrder }
+
+    /// Makes the view model represent state when verification of stamp rareness is in progress.
+    let rarenessVerificationInProgress (viewModel : StampCollectionViewModel) =
+        { viewModel with IsRarenessVerificationInProgress = true }
+
+    /// Makes the view model represent state when verification of stamp rareness is not in progress.
+    let rarenessVerificationNotInProgress (viewModel : StampCollectionViewModel) =
+        { viewModel with IsRarenessVerificationInProgress = false }

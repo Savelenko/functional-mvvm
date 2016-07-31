@@ -3,13 +3,13 @@
 open Stamps.Model
 open Stamps.ViewModel
 
-(* The view model and view are triggered using messages. A message may originate from the view based on a GUI event.
-A message may also originate from the "effectful world" and carry a result of an effectful computation performed in
+(* The view model and view are triggered using messages. A message originates from the view based on a GUI event.
+A message can also originate from the "effectful world" and carry a result of an effectful computation performed in
 that world, for example (EM1) below. The following type defines all possible messages. *)
 
 type Message =
     | AddStamp of description : string * value : uint32
-    | ValidateRareness of description : string
+    | ValidateRareness of description : string * value : uint32
     | RarenessValidated of description : string * rareness : Stamps.Model.Rareness // (EM1)
     | SortStamps of StampSortedDisplayOrder
     | RemoveStampSorting
@@ -35,21 +35,22 @@ module Dispatching =
             (m',vm',None)
         
         // User initiated action "validate stamp rareness" in the view.
-        | ValidateRareness description -> 
-            let validation = Model.verifyStampRareness description m
+        | ValidateRareness (description, value) -> 
+            let validation = Model.verifyStampRareness description value m
             // Transform the outcome of validation to a message which will be fed into this same dispatcher function.
             // Note that this means that Effect T becomes Effect Message with T carried by the corresponding message.
             let validation' =
                 validation
                 |> Effect.map RarenessValidated
 
-            (m,vm,validation')
-            // TODO extend VM with feedback about rareness validation being in-progress
+            let vm' = ViewModel.rarenessVerificationInProgress vm
+
+            (m,vm',validation')            
         
         // The "effectful world" computed rareness of a stamp.
         | RarenessValidated (description, rareness) ->
             let m' = Model.setStampRareness description rareness m
-            let vm' = ViewModel.refresh m' vm
+            let vm' = vm |> ViewModel.refresh m' |> ViewModel.rarenessVerificationNotInProgress
             (m',vm',None)
 
         // ... and so on

@@ -32,7 +32,9 @@
                             <TextBlock Text="Rareness:" Margin="0,0,4,0"/>
                             <TextBlock Text="{Binding Path=Rareness}"/>
                             <Button VerticalAlignment="Center"                                    
-                                    Visibility="{Binding Path=IsVerificationEnabled, Converter={StaticResource visibilityConverter}}">
+                                    Visibility="{Binding Path=IsVerificationEnabled,
+                                                Converter={StaticResource visibilityConverter}}"
+                                    Click="ButtonCheckRarenessClick">
                                 check
                             </Button>
                         </StackPanel>
@@ -62,7 +64,9 @@
             <TextBox Name="newStampValue" Width="40" Margin="0,0,4,0" Height="20"></TextBox>
             <Button Click="Button_Click" VerticalAlignment="Center">Add stamp</Button>
         </StackPanel>
-        <TextBlock Grid.Row="3" Background="Yellow" Margin="0" TextAlignment="Center">
+        <TextBlock Grid.Row="3" Background="Yellow" Margin="0" TextAlignment="Center"
+                   Visibility="{Binding Path=IsRarenessVerificationInProgress,
+                                                Converter={StaticResource visibilityConverter}}">
             Working...
         </TextBlock>
     </Grid>

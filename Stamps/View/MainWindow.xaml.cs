@@ -48,7 +48,7 @@ namespace Stamps.View
             this.DataContext = viewModel;
 
             /* Some things are easier to make not using WPF data binding. The following fragment displays current
-             * stamp sorting order using the corresponding radio buttons. */
+             * stamp display order using the corresponding radio buttons. */
              // { none of the radio buttons is checked }, by intention
             if (viewModel.DisplayOrder.Equals(SortedValueHighToLow))
             {
@@ -92,6 +92,19 @@ namespace Stamps.View
                 rb == this.rbSortLowToHigh ? Message.NewSortStamps(StampSortedDisplayOrder.ByValueAscending) :
                 rb == this.rbSortNone ? Message.RemoveStampSorting :
                 this.Throw<Message>(new ArgumentException("Event handler attached to wrong element."));
+
+            this.applicationModel.SendMessage(message);
+        }
+
+        private void ButtonCheckRarenessClick(object sender, RoutedEventArgs e)
+        {
+            var stamp = (sender as Button)?.DataContext as StampViewModel;
+            if (stamp == null)
+            {
+                throw new ArgumentException("Event handler attached to wrong element.");
+            }
+
+            var message = Message.NewValidateRareness(stamp.Description, stamp.Value);
 
             this.applicationModel.SendMessage(message);
         }
