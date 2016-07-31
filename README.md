@@ -1,2 +1,7 @@
 # functional-mvvm
-A demo of a GUI application with an MVVM-like architecture where model and view model are purely functional.
+
+This is a small demonstration of an MVVM architecture in FP style. Although the efforts of existing well-known F# projects dealing with MVVM and MVC are commendable, I personally wanted something more idiomatic. It is a shame _not_ to aim for an architecture, where state and mutability is confined as much as possible to the layer which is inherently stateful and mutable -- the view.
+
+A short search did not lead to any satisfying results, so I developed this architecture by combining the good properties of MVVM and the [Elm architecture](http://guide.elm-lang.org/architecture/index.html). One thing about the Elm architecture which I wanted to avoid is the same "problem" as with MVC: the model must contain state related to view-only considerations. A simple example of this is when data can be _displayed_ sorted in various ways, while the model does not care about sorting, according to its domain definition. Thus, MVVM is the way to go, where the view model is, by definition, the place for such "noise".
+
+The result is a small WPF application where both the view and view model (written in F#) are pure and only the view (written in C#) is unavoidably stateful. Comments, questions and suggestions are welcome (in the issue section).
