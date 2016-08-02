@@ -32,7 +32,15 @@ the dependency inversion principle, the model defines how it wishes to consume t
 
 type IStampRarenessService =
     
-    abstract VerifyRareness : Description * uint32 -> Effect<Description * Rareness>
+    (* In order to be pure, the model is not allowed to verify stamp rareness directly, using this service.
+    Instead, we create a definition of this action, which requires an effectful computation and will be performed
+    elsewhere, outside the model. The result of this computation must then somehow find its way to the model, which
+    will be shown in another component of the system. We use Async to define such computations. The nice thing
+    (probably by design, exactly to support such a scenario as this) about F# Async is that definition of an Async
+    value is strictly separated from its execution; due to this, it is easy to write pure functions involving Async.
+    In contrast, .NET Task is supposed to be already running when returned by a function. *)
+
+    abstract VerifyRareness : Description * uint32 -> Async<Description * Rareness>
 
 (* "The" main model is the collection of owned stamps together with the rareness service. *)
 
@@ -71,16 +79,14 @@ module Model =
 
 
     (* In the next function we don't use type OwnedStamp for the convenience of the model consumer, i.e. the view
-    model. We kind of consider type OwnedStamp to be implementation details of the model. *)
+    model. We kind of consider type OwnedStamp to be an implementation detail of the model. *)
 
     /// Returns all stamp exemplars in the stamp collection.
     let allStamps collection =
         
         let allExemplars (OwnedStamp (stamp, number)) = List.replicate (int number) stamp
 
-        let { Stamps = stamps } = collection        
-
-        stamps
+        collection.Stamps
         |> Seq.collect allExemplars
         |> List.ofSeq
 
@@ -107,8 +113,8 @@ module Model =
                 |> flip Set.add stamps
             { collection with Stamps = withNewStamp }
 
-    (* The following two functions implement stamp rareness verification. Note how the type of the effect returned by
-    the first function occurs in the type of the second function. *)
+    (* The following two functions implement stamp rareness verification. Note how the result type of the effectful
+    computation returned by the first function occurs in the type of the second function. *)
     
     /// Computes rareness of the stamp with the given description.
     let verifyStampRareness description value collection =

@@ -17,5 +17,3 @@ type WorldStampKnowledgeBaseService() =
             
                 return (description, if int value % 5 = 0 then Rareness.VerifiedNotRare else VerifiedRare)
             }
-            |> Effect
-                        

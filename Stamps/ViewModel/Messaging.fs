@@ -14,6 +14,27 @@ type Message =
     | SortStamps of StampSortedDisplayOrder
     | RemoveStampSorting
 
+(* The model returns effectful computations as F# Async values. A bit further, we will need to distinguish situations
+when there is a computation to perform and when no action should be taken, beside application of model and view model
+functions. The following type contains corresponding values, where None designates no need to perform any effect. *)
+
+type Effect<'T> =
+    | None
+    | Effect of Async<'T>
+
+[<CompilationRepresentation(CompilationRepresentationFlags.ModuleSuffix)>]
+module Effect =
+
+    /// Applies the given function to the result of the effectful computation.
+    let map f = function
+        | None -> None
+        | Effect comp ->            
+            async {
+                let! x = comp
+                return f x
+            }
+            |> Effect
+
 module Dispatching =
 
     (* The dispatch function translates messages to invocations of functions provided by the model and the view model.
@@ -36,12 +57,10 @@ module Dispatching =
         
         // User initiated action "validate stamp rareness" in the view.
         | ValidateRareness (description, value) -> 
-            let validation = Model.verifyStampRareness description value m
+            let validation = Effect <| Model.verifyStampRareness description value m
             // Transform the outcome of validation to a message which will be fed into this same dispatcher function.
             // Note that this means that Effect T becomes Effect Message with T carried by the corresponding message.
-            let validation' =
-                validation
-                |> Effect.map RarenessValidated
+            let validation' = validation |> Effect.map RarenessValidated
 
             let vm' = ViewModel.rarenessVerificationInProgress vm
 
